@@ -1,3 +1,7 @@
+Thinking in Java和On Java 8读书笔记（只记录了对我来说的重点）
+
+[On Java 8](https://lingcoder.github.io/OnJava8/#/)
+
 ## 第一章 对象导论
 
 ### 1.1 抽象过程
@@ -47,4 +51,130 @@ Java的动态绑定是默认行为。
 通常按照 Java 规范编写的程序会比面向过程程序更容易被理解。
 
 你看到的是对象的概念，这些概念是站在“问题空间”（问题本身）的（而不是站在计算机角度的“解决方案空间”），以及发送消息给对象以指示该空间中的活动。面向对象编程的一个优点是：设计良好的 Java 程序代码更容易被人阅读理解。由于 Java 类库的复用性，通常程序要写的代码也会少得多。
+
+## 第二章 
+
+#### 2.2.1 存储位置
+
+对象引用存放于栈中，对象存在堆中
+
+基本类型取决于全局变量还是局部变量，全局变量放置堆中，局部变量放置栈中
+
+#### 练习2
+
+```java
+/**
+ * * 2.
+ * * Create a class with a String field initialized
+ * * at the point of definition, and another one
+ * * initialized by the constructor. What is the
+ * * difference between the two approaches?
+ * <p>
+ * 调用构造器
+ * 按照属性的声明顺序
+ * str 在构造器初始化前初始化了
+ * conStr 被初始化为null
+ * 执行构造器的主体
+ * conStr 被赋值
+ * conStr 更加灵活，可以通过构造器传参设置
+ */
+class Demo2 {
+    private String str = "initialized";
+    private String conStr;
+
+    public Demo2() {
+        this.conStr = "init by con";
+    }
+
+}
+```
+
+### 5.4 this关键字
+
+为了能用简便、面向对象的语法来编写代码—即“发送消息给对象”，编译器做了一些幕后工作。它暗自把“所操作对象的引用”作为第一个参数传递给了方法。
+
+```java
+class Banana {
+    void peel(int i) {
+        /*...*/
+    }
+}
+public class BananaPeel {
+    public static void main(String[] args) {
+        Banana a = new Banana(), b = new Banana();
+        a.peel(1);
+        b.peel(2);
+    }
+}
+```
+
+因此，上述的方法调用像这个样子
+
+```java
+Banana.peel(a, 1)
+Banana.peel(b, 2)
+```
+
+但是，对象引用是被秘密地传达给编译器——并不在参数列表中。
+
+this关键字表示对“调用方法的那个对象”的引用，this对象只能在方法内部使用。
+
+尽管可以使用this调用一个构造器，但却不能调用两个。必须将构造器调用写在构造方法的最上面，否则编译器会报错
+
+除了构造方法外，编译器禁止在其他任何方法中调用构造器
+
+### 5.5 清理：终结处理和垃圾回收
+
+一旦垃圾回收器准备好释放对象占用的存储空间，将首先调用其finalize方法，并且在下一次垃圾回收动作发生时，才会真正回收对象占用的内存。
+
+Java里的对象并非总是被垃圾回收：
+
+1. 对象可能不被垃圾回收
+2. 垃圾回收只和内存有关
+
+如果程序执行结束，并且垃圾回收器一直都没有释放你创建的任何对象的存储空间，则随着程序的退出，那些资源也会全部交还给操作系统。
+
+对于与垃圾回收有关的任何行为来说（尤其是finalize方法），它们也必须同内存及其回收有关
+
+#### 5.5.3 终结条件
+
+finalize可以用来做”对象终结条件“的验证，如果某次finalize的动作使得可能的缺陷被发现，那么就可以根据此找出问题的所在
+
+```java
+lass Book {
+    boolean checkedOut = false;
+
+    Book(boolean checkOut) {
+        checkedOut = checkOut;
+    }
+
+    void checkIn() {
+        checkedOut = false;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if (checkedOut) {
+            System.out.println("Error: checked out");
+        }
+        // Normally, you'll also do this:
+        // super.finalize(); // Call the base-class version
+    }
+}
+
+public class TerminationCondition {
+
+    public static void main(String[] args) {
+        Book novel = new Book(true);
+        // Proper cleanup:
+        novel.checkIn();
+        // Drop the reference, forget to clean up:
+        new Book(true);
+        // Force garbage collection & finalization:
+        System.gc();
+        new Nap(1); // One second delay
+    }
+
+}
+```
 
