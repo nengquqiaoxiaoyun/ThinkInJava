@@ -14,7 +14,7 @@ public class PetCount {
         }
     }
 
-    public static void countPets(PetCreator creator) {
+    public static void countPets() {
         Counter counter = new Counter();
         for (Pet pet : Pets.array(20)) {
             // List each individual pet:
@@ -51,6 +51,6 @@ public class PetCount {
     }
 
     public static void main(String[] args) {
-        countPets(null);
+        countPets();
     }
 }

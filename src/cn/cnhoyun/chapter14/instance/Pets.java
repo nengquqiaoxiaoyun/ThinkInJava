@@ -6,8 +6,8 @@ import java.util.*;
 import java.util.stream.*;
 
 public class Pets {
-//    public static final PetCreator CREATOR = new LiteralPetCreator();
-    public static final PetCreator CREATOR = new ForNameCreator();
+    public static final PetCreator CREATOR = new LiteralPetCreator();
+//    public static final PetCreator CREATOR = new ForNameCreator();
 
     public static Pet get() {
         return CREATOR.get();
@@ -27,6 +27,11 @@ public class Pets {
     }
 
     public static Stream<Pet> stream() {
+        /**
+         * generate中的参数需要实现 Supplier ,提供get方法，这里的CREATOR的父类实现了Supplier
+         * get方法（伪）随机返回实例
+         * 具体返回的types需要子类自己实现
+         */
         return Stream.generate(CREATOR);
     }
 }

@@ -17,7 +17,8 @@ public class PetCount3 {
         public void count(Pet pet) {
             // Class.isInstance() 替换 instanceof:
             entrySet().stream()
-                    .filter(pair -> pair.getKey().isInstance(pet))
+                    .filter(pair -> pair.getKey().isInstance(pet)
+                    )
                     .forEach(pair ->
                             put(pair.getKey(), pair.getValue() + 1));
         }
@@ -36,10 +37,13 @@ public class PetCount3 {
     public static void main(String[] args) {
         Counter petCount = new Counter();
         Pets.stream()
-                .limit(20)
+                .limit(10)
                 .peek(petCount::count)
-                .forEach(p -> System.out.println(
-                        p.getClass().getSimpleName() + " "));
-        System.out.println("n" + petCount);
+                .forEach(p ->
+                        System.out.print(
+                                p.getClass().getSimpleName() + " ")
+                );
+        System.out.println();
+        System.out.println("petCount： " + petCount);
     }
 }

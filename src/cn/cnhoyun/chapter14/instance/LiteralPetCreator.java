@@ -13,10 +13,10 @@ public class LiteralPetCreator extends PetCreator {
                     Pet.class, Dog.class, Cat.class, Rodent.class,
                     Mutt.class, Pug.class, EgyptianMau.class,
                     Manx.class, Cymric.class, Rat.class,
-                    Mouse.class, Hamster.class));
+                    Mouse.class, Hamster.class, Gerbil.class));
     // 用于随机创建的类型:
     private static final List<Class<? extends Pet>> TYPES =
-            ALL_TYPES.subList(ALL_TYPES.indexOf(Mutt.class),
+            ALL_TYPES.subList(ALL_TYPES.indexOf(Cat.class),
                     ALL_TYPES.size());
 
     @Override
@@ -25,6 +25,6 @@ public class LiteralPetCreator extends PetCreator {
     }
 
     public static void main(String[] args) {
-        System.out.println(TYPES);
+        TYPES.forEach(pet -> System.out.print(pet.getSimpleName() + " "));
     }
 }
