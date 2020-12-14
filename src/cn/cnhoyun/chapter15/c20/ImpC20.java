@@ -1,5 +1,7 @@
 package cn.cnhoyun.chapter15.c20;
 
+import org.omg.CORBA.Object;
+
 /**
  * @author: huakaimay
  * @since: 2020-12-14
@@ -18,11 +20,16 @@ public class ImpC20 implements C20 {
     <T extends C20> void c(T t) {
         t.a();
         t.b();
+        // can not
+        // t.d();
+    }
+
+    void d() {
+        System.out.println("d");
     }
 
     public static void main(String[] args) {
         ImpC20 impC20 = new ImpC20();
-
         impC20.c(new ImpC20());
     }
 }
