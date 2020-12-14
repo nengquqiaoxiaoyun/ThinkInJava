@@ -2,15 +2,24 @@
 package cn.cnhoyun.chapter15.whildcard;
 
 class Fruit {
+    void fruid() {
+        System.out.println("furit : fruid");
+    }
 }
 
 class Apple extends Fruit {
+    void b(){
+        System.out.println("apple : b");
+    }
 }
 
 class Jonathan extends Apple {
 }
 
 class Orange extends Fruit {
+    void orange() {
+        System.out.println("orange");
+    }
 }
 
 public class CovariantArrays {

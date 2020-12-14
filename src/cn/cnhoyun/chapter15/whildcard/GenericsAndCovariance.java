@@ -2,7 +2,8 @@ package cn.cnhoyun.chapter15.whildcard;// generics/GenericsAndCovariance.java
 
 import java.util.*;
 
-public class GenericsAndCovariance {
+public class GenericsAndCovariance<T extends Orange> {
+    private T t;
 
     public static void main(String[] args) {
         // Wildcards allow covariance:
@@ -14,6 +15,12 @@ public class GenericsAndCovariance {
         flist.add(null); // Legal but uninteresting
         // We know it returns at least Fruit:
         Fruit f = flist.get(0);
+        Fruit fruit = flist.get(1);
+    }
+
+    public void test() {
+        t.fruid();
+        t.orange();
     }
 
 }
