@@ -310,3 +310,56 @@ sun的伙计们建议使用显示的工厂来创建实例，还可以使用模�
 比如 <? extends Fruit>虽然不确定是什么类型，但是我们知道它一定是Fruit下的某一个具体类型，可以是Orange也可以是Apple，但是具体是哪个我们不知道，我们也不关心。
 
 比如List\<Object> list ，可以addstr 可以 addint 等等。但是List<?> list2就不可以，因为我们不确定具体是什么类型，不能保证安全性
+
+## 第十九章 枚举类型
+
+### 19.4 values()方法的神秘之处
+
+values()是由编译器添加的static方法，由于values是编译器插入到enum定义中的static方法，所以，如果将enum实例向上转型为Enum，那么values方法就不可以访问了。在Class中有个getEnumConstants方法，即便Enum接口中没有values方法，我们也可以通过Class对象取得所有的enum实例
+
+enum实例必须定义在任何方法或属性之前
+
+### 19.5 实现，而非继承
+
+所有的enum都继承自java.lang.Enum类，所以enum无法再继承其他类
+
+enum可以实现一个或多个接口，每个实例都要重写接口的所有方法。必须要有一个实例才能调用接口的方法
+
+### 19.7 使用接口组织枚举
+
+在一个接口的内部，创建实现接口的枚举，一次将元素进行分组，可以达到将枚举元素分类组织的目的
+
+对于enum而言，实现接口是使其子类化的唯一办法
+
+### 19.8 EnumSet
+
+```java
+public class EnumSets {
+    public static void main(String[] args) {
+        EnumSet<AlarmPoints> points = EnumSet.noneOf(AlarmPoints.class); // Empty
+        points.add(BATHROOM);   
+        points.addAll(EnumSet.of(STAIR1, STAIR2, KITCHEN));
+        points = EnumSet.allOf(AlarmPoints.class);
+        points.removeAll(EnumSet.of(STAIR1, STAIR2, KITCHEN));
+        points.removeAll(EnumSet.range(OFFICE1, OFFICE4));
+        // 恢复
+        points = EnumSet.complementOf(points);
+    }
+}
+```
+
+EnumSet（抽象类）有两个实现类，由enum实例的数量决定哪个子类（超过一个long值，64位）。
+
+### 19.9 EnumMap
+
+EnumMap是一种特殊的Map，它要求key必须是一个enum。由于enum本身的限制，所以EnumMap的内部可以由数组实现，所以EnumMap的速度很快
+
+和EnumSet一样，enum实例定义的顺序决定了其在EnumMap的顺序（enum实例被它们添加的顺序不重要，输出顺序取决于实例定义的顺序）
+
+在面向对象的程序设计中，不同的行为与不同的类关联。enum实例就像一个独特的类，实现接口方法时可以体现出多态的行为，但是，enum实例并不是真正的类。它与类的相似之处仅此而已
+
+编译器不允许我们将一个enum实例当做class类型
+
+----
+
+此章讲了很多enum的实用技巧和设计模式，目前水平有限看的勉强。看完设计模式再回来读这些案例
