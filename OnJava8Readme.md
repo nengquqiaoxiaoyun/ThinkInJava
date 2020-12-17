@@ -445,3 +445,79 @@ public class AUExternalTest extends AtUnitExample1 {
 
 第21章并发等看Java并发编程之美前再看
 
+
+
+## OnJava8 十三章 函数式编程
+
+面向对象编程是对数据进行抽象，函数式编程是对行为进行抽象
+
+函数式语言背后有很多动机，它通常取决于各种观点：为“并行编程”，“代码可靠性”和“代码创建和库复用”。其核心是：在思考问题时，使用不可变值和函数，函数对一个值进行处理，映射成另一个值
+
+不可变对象和无副作用”范式解决了并发编程中最基本和最棘手的问题之一， 因此，经常提出纯函数式语言作为并行编程的解决方案（还有其他可行的解决方案）
+
+### 方法引用
+
+方法签名：方法名+参数列表，和返回值无关
+
+只需要引入和接口中具有相同参数的方法即可(接口若是void，其他方法的返回值无关精要，接口若是规定了返回值其与方法必须一致)
+
+### 构造函数
+
+对于多个构造函数的引用都可以使用类型::new 这样的方式调用，编译器可以从中知道具体使用哪个构造函数
+
+### 函数式接口
+
+ 编译器会在后台把方法引用或 Lambda 表达式包装进实现目标接口的类的实例中
+
+Java 8 允许我们将函数赋值给接口
+
+如果你了解命名模式，顾名思义就能知道特定接口的作用。
+
+以下是基本命名准则：
+
+1. 如果只处理对象而非基本类型，名称则为 `Function`，`Consumer`，`Predicate` 等。参数类型通过泛型添加。
+2. 如果接收的参数是基本类型，则由名称的第一部分表示，如 `LongConsumer`，`DoubleFunction`，`IntPredicate` 等，但返回基本类型的 `Supplier` 接口例外。
+3. 如果返回值为基本类型，则用 `To` 表示，如 `ToLongFunction <T>` 和 `IntToLongFunction`。
+4. 如果返回值类型与参数类型相同，则是一个 `Operator` ：单个参数使用 `UnaryOperator`，两个参数使用 `BinaryOperator`。
+5. 如果接收参数并返回一个布尔值，则是一个 **谓词** (`Predicate`)。
+6. 如果接收的两个参数类型不同，则名称中有一个 `Bi`。
+
+用基本类型（`IntToDoubleFunction`）的唯一理由是可以避免传递参数和返回结果过程中的自动拆装箱，进而提升性能
+
+### 闭包
+
+被 Lambda 表达式引用的局部变量必须是 `final` 或者是等同 `final` 效果的。
+
+Lambda 可以没有限制地引用 实例变量和静态变量。但 局部变量必须显式声明为final，或事实上是final 
+
+实际上只要有内部类，就会有闭包（Java 8 只是简化了闭包操作）。在 Java 8 中，内部类的规则放宽，包括**等同 final 效果**(8之前内部类的局部变量必须声明为final)。Lambda不是内部类
+
+### 柯里化
+
+ 柯里化意为：将一个多参数的函数，转换为一系列单参数函数
+
+```java
+public class CurryingAndPartials {
+   // 未柯里化:
+   static String uncurried(String a, String b) {
+      return a + b;
+   }
+   public static void main(String[] args) {
+      // 柯里化的函数:
+      Function<String, Function<String, String>> sum =
+         a -> b -> a + b; // [1]
+
+      System.out.println(uncurried("Hi ", "Ho"));
+
+      Function<String, String>
+        hi = sum.apply("Hi "); // [2]
+      System.out.println(hi.apply("Ho"));
+
+      // 部分应用:
+      Function<String, String> sumHi =
+        sum.apply("Hup ");
+      System.out.println(sumHi.apply("Ho"));
+      System.out.println(sumHi.apply("Hey"));
+   }
+}
+```
