@@ -4,9 +4,7 @@ import cn.cnhoyun.java8func.chapter1.Artist;
 import cn.cnhoyun.java8func.chapter1.SampleData;
 import org.junit.Test;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,6 +32,7 @@ public class P56_2 {
         System.out.println(reduce);
     }
 
+
     /**
      * 计算每个名字出现的次数 用map接收
      */
@@ -42,7 +41,15 @@ public class P56_2 {
         Stream<String> names = Stream.of("John", "Paul", "George", "John", "Paul", "John");
 
         Map<String, Long> collect = names.collect(Collectors.groupingBy(name -> name, Collectors.counting()));
-        System.out.println(collect);
+
+
+        Map<String, Long> collect1 = collect.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newVal) -> oldValue, LinkedHashMap::new));
+        System.out.println(collect1);
 
     }
+
+
+
 }
