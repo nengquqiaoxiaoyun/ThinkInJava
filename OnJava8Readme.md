@@ -561,7 +561,7 @@ Stream.generate() 的用法，它可以把任意 Supplier\<T> 用于生成 T 类
 1. 跟踪和调试：peek
 2. 流元素排序：sorted
 3. 移除元素：distinct去重，filter过滤
-4. 将函数应用到元素上：map、mapToInt...
+4. 将函数应用到元素上：map、mapToInt…，将元素经过一系列操作后，将操作后的流返回
 5. 在map中组合流：flatmap可以使多个流转为一个
 
 ### 终端操作
