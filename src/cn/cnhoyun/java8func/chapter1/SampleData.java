@@ -27,7 +27,7 @@ public class SampleData {
 
     public static Stream<Album> albums = Stream.of(aLoveSupreme);
 
-    public static final List<Album> albumList = Arrays.asList(SampleData.aLoveSupreme, SampleData.manyTrackAlbum, SampleData.sampleShortAlbum);
+    public static final List<Album> albumList = Arrays.asList(aLoveSupreme, manyTrackAlbum, sampleShortAlbum);
 
     public static Stream<Artist> threeArtists() {
         return Stream.of(johnColtrane, johnLennon, theBeatles);
